@@ -1,0 +1,19 @@
+{
+    "name": "hnova/phpnv",
+    "autoload": {
+        "psr-4": {
+            "PhpNv\\": "src/",
+            "Example\\": "example"
+        },
+        "files":[
+           "src/GlobalFunctions.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "HeilerNova",
+            "email": "81369584+HeilerNova@users.noreply.github.com"
+        }
+    ],
+    "require": {}
+}
