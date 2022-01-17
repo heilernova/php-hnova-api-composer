@@ -10,19 +10,19 @@ class Error
         $path = $_ENV['nv-api-dir-errors'] . 'system-errors.txt';
 
         $json = [
-            'information'=>[
+            'logData'=>[
                 'timeZone'=>date_default_timezone_get(),
                 'date'=>date('c', time())
             ],
-            'clientInformation'=>[
-                'ip'=>'',
-                'device'=>0
-            ],
             'http'=>[
-                'httpUrl'=>$_GET['url'],
-                'httpRequestMethod'=>$_SERVER['REQUEST_METHOD']
+                'url'=>$_GET['url'],
+                'requestMethod'=>$_SERVER['REQUEST_METHOD'],
+                'ip'=>'',
+                'device'=>'',
+                'latform'=>''
             ],
-            'messages'=>$deloper_messages
+            'messages'=>$deloper_messages,
+            'throwable'=>null
         ];
     
         if ($throwable){

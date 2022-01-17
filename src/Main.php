@@ -125,9 +125,8 @@ class Main
         }
 
         if (empty($url)){
-            require 'index.php';
+            require '../Views/index.php';
         }else{
-
             $route = Routing::find($url);
     
             if ($route){

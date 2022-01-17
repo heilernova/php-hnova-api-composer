@@ -7,10 +7,12 @@ class Routing
 {
     private static array $listRoutes = [];
 
-    public static function AddRoute(string $url, string|callable|array $controller, ?callable $guard = null ):void
+    public static function AddRoute(string $url, string|callable|array $controller, ?callable $canActive = null ):Route
     {
+        $r = new Route($url, $controller, $canActive);
+        self::$listRoutes[] = $r;
+        return $r;
 
-        self::$listRoutes[] = new Route($url, $controller, $guard);
     }
 
     /**

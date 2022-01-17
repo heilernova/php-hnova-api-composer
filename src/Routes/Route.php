@@ -28,6 +28,8 @@ class Route
 
     public $guard = null;
 
+    public array $chilRoutes = [];
+
     public function __construct(string $url, string|callable|array $controller, ?callable $guard = null)
     {
         $this->url = $url;
