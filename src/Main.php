@@ -27,6 +27,8 @@ class Main
         $_ENV['nv-api-name'] = $api_name ? $api_name : '';
 
         $_ENV['nv-api-dir-errors'] = '../errors/';//$settings_json['dirErrors'];
+
+        $_ENV['nv-name-proyect'] = $json['application']['name'];
     }
 
     private function listItems(array $items):string
@@ -99,12 +101,14 @@ class Main
 
         date_default_timezone_set($this->timezone);
 
-        Routing::AddRoute('nv/errors/list', function(){ ErrorController::get(); });
+        Routing::get('nv-errors/list', function(){ ErrorController::get(); });
+        Routing::delete('nv-errors/list/all', function(){ ErrorController::deleteAll(); });
+        Routing::delete('nv-errors/list/{id:int}', function($id){ ErrorController::delete($id); });
 
+        
         if ($this->origins) header("Access-Control-Allow-Origin: $this->origins");
         if ($this->headers) header("Access-Control-Allow-Headers:$this->headers");
         if ($this->methods) header("Access-Control-Allow-Methods: $this->methods");
-        
         // ------------------------ CORS
 
         if (isset($_SERVER['HTTP_Origin'])) {
@@ -124,16 +128,13 @@ class Main
             exit(0);
         }
 
+        
+
         if (empty($url)){
-            require '../Views/index.php';
+            header("Content-Type: text/html; charset=utf-8");
+            require 'Views/index.php';
         }else{
-            $route = Routing::find($url);
-    
-            if ($route){
-                $route->execute();
-            }else{
-                response('not controller', 404);
-            }
+           Controller::execute($url);
         }
     }
 }

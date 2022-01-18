@@ -6,6 +6,9 @@ namespace PhpNv\Client;
  */
 class ClientInfo
 {
+    /**
+     * @return string Obtine la ip de cliente
+     */
     public static function getIp():string
     {
         return $_SERVER['HTTP_CLIENT_IP'] ?? ( $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR']);

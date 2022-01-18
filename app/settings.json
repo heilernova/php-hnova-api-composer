@@ -1,4 +1,7 @@
 {
+    "application":{
+        "name":"FTC - CENTER"
+    },
     "databases":{
         "default": "default",
         "list":{

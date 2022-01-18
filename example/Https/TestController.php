@@ -9,8 +9,8 @@ class TestController extends HttpController
 {
 
     function get(){
-        $this->database->execute("SELECT * FROM tb_app");
-        response('Hello word');
+        $result = $this->database->execute("SELECT * FROM tb_business")->fetch_all(MYSQLI_ASSOC);
+        response($result);
     }
 
     function getHola()

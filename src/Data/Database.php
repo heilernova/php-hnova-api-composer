@@ -5,6 +5,8 @@ use mysqli;
 use mysqli_result;
 use PhpNv\Error;
 
+use function PhpNv\Http\response;
+
 /**
  * @author Heiler Nova.
  */
@@ -36,7 +38,7 @@ class Database
             try {
                 
                 $data = $this->connectionData;
-                $connection = mysqli_connect($data['hostname'], $data['username'], $data['password'], $data['database']);
+                $connection = @mysqli_connect($data['hostname'], $data['username'], $data['password'], $data['database']);
                 $this->connection = $connection;
                 $this->connection->autocommit(false);
                 
@@ -51,6 +53,10 @@ class Database
         }
     }
 
+    public function commit(){
+        $this->connection->commit();
+    }
+
     /**
      * Ejecuta una instrución sql preparada en la base de datos
      * @param string $sql Instrución sql a ejecutar en caso de usar parametros de debe espeficiar con "?"
@@ -63,7 +69,7 @@ class Database
         try {
             $this->openConnection();
             $stmt = $this->connection->prepare($sql);
-
+            
             if ($stmt){
                 
                 if ($params){
@@ -101,7 +107,24 @@ class Database
             }
 
         } catch (\Throwable $th) {
-            Error::log(['Error con la ejecución del metodo Database::execute'], $th);
+
+            $msg = [];
+            $msg[] = 'Error con la ejecución del metodo Database::execute';
+            $msg[] = "Sql: $sql";
+            $msg[] = "Paramentros: " . (!$params ? 'null' : '');
+
+
+            if ($params){
+                $prms = []; response($params);
+                foreach ($params  as $key => $value){
+                    $prms[] = "$key = $value : " . gettype($value);
+                }
+                $msg[] = $prms;
+            }
+
+            $msg[] = "Error: " . $th->getMessage();
+
+            Error::log($msg, $th);
         }
         return false;
     }

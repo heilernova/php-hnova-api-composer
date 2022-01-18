@@ -3,7 +3,6 @@ namespace PhpNv\Http;
 
 use PhpNv\Error;
 
-use function PhpNv\response;
 
 /**
  * @author Heiler Nova.

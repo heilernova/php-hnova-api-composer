@@ -1,6 +1,7 @@
 <?php
 namespace PhpNv;
 
+use PhpNv\Client\ClientInfo;
 use Throwable;
 
 class Error
@@ -12,14 +13,15 @@ class Error
         $json = [
             'logData'=>[
                 'timeZone'=>date_default_timezone_get(),
-                'date'=>date('c', time())
+                'date'=>date('c', time()),
+                'viewed'=>false
             ],
             'http'=>[
                 'url'=>$_GET['url'],
                 'requestMethod'=>$_SERVER['REQUEST_METHOD'],
-                'ip'=>'',
-                'device'=>'',
-                'latform'=>''
+                'ip'=>ClientInfo::getIp(),
+                'device'=>ClientInfo::getDevice(),
+                'platform'=>ClientInfo::getPlatform()
             ],
             'messages'=>$deloper_messages,
             'throwable'=>null
@@ -27,6 +29,7 @@ class Error
     
         if ($throwable){
             $json['throwable'] = [
+                'message'=>$throwable->getMessage(),
                 'code'=>$throwable->getCode(),
                 'file'=>$throwable->getFile(),
                 'line'=>$throwable->getLine(),
@@ -37,6 +40,8 @@ class Error
         if (!file_exists($path)){
             fclose(fopen($path, 'w'));
         }
+
+
         
         $json = json_encode($json);
         file_put_contents($path, "$json,\n", FILE_APPEND);

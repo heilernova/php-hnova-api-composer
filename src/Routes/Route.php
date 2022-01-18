@@ -3,6 +3,7 @@ namespace PhpNv\Routes;
 
 use PhpNv\Error;
 use PhpNv\Routes\Route as RoutesRoute;
+use ReflectionFunction;
 use ReflectionMethod;
 
 use function PhpNv\Http\response;
@@ -18,7 +19,7 @@ class Route
     public int      $urlItemsNum = 0;
     public array    $urlItems = [];
 
-    public string   $httpMethod = '';
+    public ?string   $httpMethod = null;
     public string   $httpRequest = '';
 
     public $controller;
@@ -26,17 +27,22 @@ class Route
     public array    $indexControllers = [];
     public array    $indexParams = [];
 
-    public $guard = null;
+    public array $canActive = [];
 
     public array $chilRoutes = [];
 
-    public function __construct(string $url, string|callable|array $controller, ?callable $guard = null)
+    public int $numController = 0;
+
+    public function __construct(string $url, string|callable|array $controller, ?callable $canActive = null, $method = null)
     {
         $this->url = $url;
         $this->urlItems = explode('/', $url);
         $this->urlItemsNum = count($this->urlItems);
 
         $this->controller = $controller;
+
+        if ($canActive) $this->canActive[] = $canActive;
+        $this->httpMethod = $method;
 
         // We set the parameters indices and controller identifiers
         $i = 0;
@@ -50,6 +56,7 @@ class Route
 
             $i++;
         }
+        $this->numController = count($this->indexControllers);
     }
 
     /**
@@ -75,20 +82,47 @@ class Route
         return $params;
     }
 
+    public function getHttp():RouteController{
+
+        return new RouteController(
+            $this->httpRequest, 
+            $this->getHttpParams(), 
+            $this->controller,
+            $this->canActive,
+            $this->httpMethod,
+        );
+    }
 
     public function execute():void
     {
+        // 
+
+        if ($this->canActive){
+            $canActive = $this->canActive;
+
+            // $ref = new ReflectionMethod($canActive);
+            
+            $canActive();
+
+        }
         
         if (is_callable($this->controller)){
             $calleble = $this->controller;
-            $calleble();
+
+            if ($this->httpMethod == $_SERVER['REQUEST_METHOD']){
+                $re = new ReflectionFunction($calleble);
+                $params = $this->getHttpParams();
+                $re->invokeArgs($params);
+            }else{
+                response('Method not allowed for URL', 405);
+            }
+            
         }else{
             $namespace = '';
             $method = '';
 
             if (is_array($this->controller)){
                 $namespace = $this->controller[0];
-            
                 $method = $this->controller[1];
             }else{
 
@@ -97,7 +131,7 @@ class Route
 
             $controller = new $namespace();
 
-            $method = strtolower($_SERVER['REQUEST_METHOD']) . ucfirst($this->httpMethod);
+            $method = strtolower($_SERVER['REQUEST_METHOD']) . ucfirst($method);
 
             if (method_exists($controller, $method)){
                 
@@ -106,7 +140,7 @@ class Route
                 try {
                     $ref_method->invokeArgs($controller, $this->getHttpParams());
                 } catch (\Throwable $th) {
-                    Error::log(['Error de parametros'], $th);
+                    Error::log(['Error de parametros de url'], $th);
                 }
 
             }else{

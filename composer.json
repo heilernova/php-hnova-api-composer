@@ -3,7 +3,8 @@
     "autoload": {
         "psr-4": {
             "PhpNv\\": "src/",
-            "Example\\": "example"
+            "Example\\": "example",
+            "App\\": "app"
         },
         "files":[
            "src/GlobalFunctions.php"
@@ -15,5 +16,7 @@
             "email": "81369584+HeilerNova@users.noreply.github.com"
         }
     ],
-    "require": {}
+    "require": {
+        "phpoffice/phpspreadsheet": "^1.21"
+    }
 }

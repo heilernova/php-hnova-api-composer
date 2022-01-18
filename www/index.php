@@ -1,13 +1,11 @@
 <?php
-
-use PhpNv\Error;
 use PhpNv\Main;
-use PhpNv\Routes\Route;
 
 require_once __DIR__ . "/../vendor/autoload.php";
 
-require_once __DIR__ . "/../example/routes.php";
+require_once __DIR__ . "/../app/app-routes.php";
 
-// $main = new Main('../example/settings.json');
-// $main->setOrigin('*');
-// $main->run($_GET['url']);
+$main = new Main('../app/settings.json');
+$main->setOrigin('*');
+// $main->setHeaders('*');
+$main->run($_GET['url']);
