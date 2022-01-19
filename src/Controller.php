@@ -67,8 +67,8 @@ class Controller
                 }
                 
                 
-
                 $object_controller = new $controller_namespace();
+                // response($controller_namespace);
 
                 if (method_exists($object_controller, $controller_method)){
                     $ref = new ReflectionMethod($object_controller, $controller_method);

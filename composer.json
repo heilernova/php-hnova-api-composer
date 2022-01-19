@@ -3,11 +3,10 @@
     "autoload": {
         "psr-4": {
             "PhpNv\\": "src/",
-            "Example\\": "example",
-            "App\\": "app"
+            "Api\\": "Api/"
         },
-        "files":[
-           "src/GlobalFunctions.php"
+        "files": [
+            "src/GlobalFunctions.php"
         ]
     },
     "authors": [
@@ -16,7 +15,19 @@
             "email": "81369584+HeilerNova@users.noreply.github.com"
         }
     ],
-    "require": {
-        "phpoffice/phpspreadsheet": "^1.21"
+    "require": {},
+    "scripts": {
+        "nv": [
+            "PhpNv\\Scripts\\Proyect::execute"
+        ]
+    },
+    "nv-code": {
+        "default": "Api",
+        "projects": {
+            "Api": {
+                "src": "Api/",
+                "namespace": "Api"
+            }
+        }
     }
 }

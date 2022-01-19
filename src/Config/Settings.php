@@ -1,15 +1,17 @@
 <?php
 namespace PhpNv\Config;
 
+
 class Settings
 {
-    public static function load(string $path)
-    {
+    public Application $application;
+    public Debug $debug;
+    public Databases $databases;
 
-    }
-
-    public static function getDatabase(string $name = null):array
+    public function __construct($settings)
     {
-        return [];
+        $this->application = new Application($settings['application']);
+        $this->debug = new Debug($settings['debug']);
+        $this->databases = new Databases($settings['databases']);
     }
 }

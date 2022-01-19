@@ -2,6 +2,7 @@
 namespace PhpNv;
 
 use PhpNv\Error\ErrorController;
+use PhpNv\nv\nv;
 use PhpNv\Routes\Route;
 
 use function PhpNv\Http\response;
@@ -20,6 +21,8 @@ class Main
         header('content-type: application/json');
 
         $json = json_decode(file_get_contents($path_settings_json), true);
+
+        nv::init($json);
 
         $_ENV['nv-api-databases']['default'] = $json['databases']['default'];
         $_ENV['nv-api-databases']['list'] = $json['databases']['list'];

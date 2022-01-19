@@ -71,7 +71,8 @@
             <h2>
                 Proyect name: 
                 <?php
-                    echo $_ENV['nv-name-proyect'];
+                    $setting = \PhpNv\nv\nv::getSettigns();
+                    echo $setting->application->getName()
                 ?>
             </h2>
             <br>

@@ -1,0 +1,25 @@
+{
+    "application": {
+        "name": "Api",
+        "description": ""
+    },
+    "debug": {
+        "path": "errors",
+        "access": {
+            "username": "root",
+            "password": "admin"
+        }
+    },
+    "namespace": "Api",
+    "databases": {
+        "default": "default",
+        "list": {
+            "default":{
+                "hostname": "",
+                "username": "",
+                "password": "",
+                "database": ""
+            }
+        }
+    }
+}
